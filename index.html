@@ -161,8 +161,8 @@
   }
   .btn:active{transform:scale(.98);}
   .btn-sm{padding:9px 18px;font-size:14px;}
-  .btn-ciano{background:var(--ciano);color:var(--branco);}
-  .btn-ciano:hover{background:var(--ciano-claro);}
+  .btn-ciano{background:var(--ciano);color:#F9FAFB;}
+  .btn-ciano:hover{background:var(--ciano-claro);color:#050A14;}
   .btn-escuro{background:var(--grafite);color:var(--branco);}
   .btn-escuro:hover{background:#1F2937;}
   .btn-ghost{border-color:#374151;color:var(--branco);background:transparent;}
@@ -249,14 +249,14 @@
   .costs{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:860px;}
   .cost{
     background:var(--branco);border:1px solid var(--borda);border-radius:14px;
-    padding:44px 40px;position:relative;overflow:hidden;
+    padding:48px 42px;position:relative;overflow:hidden;
   }
   .cost::before{
     content:"";position:absolute;top:0;left:0;right:0;height:3px;
     background:linear-gradient(90deg,var(--ciano),transparent 70%);
   }
   .cost .stat-sufixo{
-    font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:var(--ciano);margin-left:6px;
+    font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:var(--grafite);margin-left:6px;
   }
   .cost strong{
     font-family:'Space Grotesk',sans-serif;color:var(--grafite);
@@ -291,7 +291,7 @@
     background:rgba(255,255,255,.035);
     border:1px solid rgba(255,255,255,.09);
     border-radius:14px;
-    padding:36px 30px 32px;position:relative;
+    padding:40px 32px 36px;position:relative;
   }
   .step-num{
     font-size:15px;font-weight:700;color:var(--ciano-claro);letter-spacing:.04em;
@@ -305,7 +305,7 @@
   .relatorio{background:var(--branco);border-top:1px solid var(--borda);}
   .relatorio-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--borda);border-radius:14px;overflow:hidden;}
   .relatorio-item{
-    padding:30px 26px;border-right:1px solid var(--borda);border-bottom:1px solid var(--borda);
+    padding:34px 28px;border-right:1px solid var(--borda);border-bottom:1px solid var(--borda);
     position:relative;transition:background .25s;
   }
   .relatorio-item:hover{background:#F8FAFB;}
@@ -338,7 +338,7 @@
     background:rgba(255,255,255,.035);
     border:1px solid rgba(255,255,255,.09);
     border-radius:14px;
-    padding:34px 30px;
+    padding:38px 32px;
     transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s,background .25s,box-shadow .35s;
   }
   .trust:hover{
@@ -360,7 +360,7 @@
   .publico{background:var(--branco);border-top:1px solid var(--borda);}
   .publico-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;}
   .pub{
-    border:1px solid var(--borda);border-radius:14px;padding:40px 36px;background:var(--off);
+    border:1px solid var(--borda);border-radius:14px;padding:44px 38px;background:var(--off);
     display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;
     transition:border-color .25s,transform .3s cubic-bezier(.16,1,.3,1);
   }
@@ -396,7 +396,7 @@
   .faq-item:last-child{border-bottom:none;}
   .faq-item summary{
     list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
-    padding:22px 26px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:var(--grafite);
+    padding:26px 28px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:var(--grafite);
     transition:background .2s;
   }
   .faq-item summary::-webkit-details-marker{display:none;}
@@ -478,7 +478,7 @@
 <!-- ============ NAV ============ -->
 <header>
   <div class="container nav">
-    <a href="#" class="logo" aria-label="Atti, página inicial">
+    <a href="/" class="logo" aria-label="Atti, página inicial">
       <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="#F9FAFB"><path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/><path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/><path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/><path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/><path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/></g></svg>
       <span class="logo-text">Atti</span>
     </a>
@@ -689,7 +689,7 @@
   <div class="container">
     <h2>O relatório fica pronto <em>antes de a reunião começar</em></h2>
     <p>Envie um processo real e veja a leitura organizada chegar, folha por folha, antes da próxima reunião.</p>
-    <a class="btn btn-ciano" href="mailto:falecom@atti.com.br">Solicitar acesso</a>
+    <a class="btn btn-ciano" href="mailto:falecom@atti.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20acesso%20-%20Atti">Solicitar acesso</a>
   </div>
 </section>
 
