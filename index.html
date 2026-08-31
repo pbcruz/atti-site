@@ -472,6 +472,51 @@
   }
 
   :focus-visible{outline:2px solid var(--ciano);outline-offset:3px;}
+
+  /* ---------- Cookie banner (LGPD/ANPD) ---------- */
+  .cookie-banner{
+    position:fixed;left:0;right:0;bottom:0;z-index:300;
+    background:rgba(5,10,20,.97);
+    backdrop-filter:blur(10px);
+    border-top:1px solid rgba(226,229,234,.12);
+    padding:20px 0;
+    transform:translateY(110%);
+    transition:transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  .cookie-banner.visible{transform:translateY(0);}
+  .cookie-banner .container{display:flex;align-items:center;gap:20px;flex-wrap:wrap;max-width:1160px;margin:0 auto;padding:0 24px;}
+  .cookie-banner p{color:var(--texto-claro);font-size:13.5px;line-height:1.55;flex:1;min-width:260px;}
+  .cookie-banner p a{color:var(--ciano-claro);text-decoration:underline;}
+  .cookie-banner .acoes{display:flex;gap:10px;flex-wrap:wrap;}
+  .cookie-banner .btn{padding:10px 18px;font-size:13.5px;}
+  .cookie-modal{
+    position:fixed;inset:0;z-index:320;
+    background:rgba(3,7,18,.7);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .cookie-modal.visible{display:flex;}
+  .cookie-modal .painel{
+    background:var(--branco);border-radius:14px;max-width:640px;width:100%;
+    padding:32px 32px 28px;max-height:85vh;overflow-y:auto;
+  }
+  .cookie-modal h3{font-size:20px;font-weight:700;margin-bottom:6px;}
+  .cookie-modal .sub{font-size:13.5px;color:var(--texto);margin-bottom:20px;}
+  .cookie-cat{
+    border:1px solid var(--borda);border-radius:10px;padding:16px 18px;margin-bottom:12px;
+  }
+  .cookie-cat .topo{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+  .cookie-cat h4{font-size:15px;font-weight:600;color:var(--grafite);}
+  .cookie-cat .sempre{font-size:12px;font-weight:600;color:var(--ciano);text-transform:uppercase;letter-spacing:.06em;}
+  .cookie-cat p{font-size:13px;color:var(--texto);margin-top:6px;}
+  .cookie-cat input[type="checkbox"]{width:18px;height:18px;accent-color:var(--ciano);cursor:pointer;}
+  .cookie-modal .acoes{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap;}
+  .cookie-modal .acoes .btn{min-width:150px;}
+  @media (max-width:640px){
+    .cookie-banner .container{flex-direction:column;align-items:flex-start;}
+    .cookie-banner .acoes{width:100%;}
+    .cookie-banner .acoes .btn{flex:1;justify-content:center;}
+    .cookie-modal .acoes .btn{flex:1;}
+  }
 </style>
 </head>
 <body>
@@ -754,12 +799,58 @@
         <a href="mailto:falecom@atti.com.br">falecom@atti.com.br</a>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 Atti · Leitura inteligente de processos judiciais</div>
+    <div class="footer-bottom">© 2026 Atti · Leitura inteligente de processos judiciais · <a href="/privacidade.html">Política de Privacidade</a></div>
   </div>
 </footer>
 
+<!-- ============ COOKIE BANNER (LGPD) ============ -->
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Aviso de cookies">
+  <div class="container">
+    <p>Usamos cookies necessários para o funcionamento do site e, com o seu consentimento, cookies analíticos para medir o desempenho. <a href="/privacidade.html">Saiba mais na Política de Privacidade</a>.</p>
+    <div class="acoes">
+      <button class="btn btn-ghost-claro" id="cookie-rejeitar">Rejeitar cookies não necessários</button>
+      <button class="btn btn-ghost-claro" id="cookie-configurar">Configurar cookies</button>
+      <button class="btn btn-ciano" id="cookie-aceitar">Aceitar todos</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COOKIE MODAL (2º nível) ============ -->
+<div class="cookie-modal" id="cookie-modal" role="dialog" aria-modal="true" aria-label="Configuração de cookies">
+  <div class="painel">
+    <h3>Configuração de cookies</h3>
+    <p class="sub">Escolha quais categorias de cookies você autoriza. Cookies baseados no seu consentimento ficam desativados por padrão.</p>
+    <div class="cookie-cat">
+      <div class="topo">
+        <h4>Cookies necessários</h4>
+        <span class="sempre">Sempre ativos</span>
+      </div>
+      <p>Garantem o funcionamento básico do site, como lembrar sua preferência de cookies. Não podem ser desativados.</p>
+    </div>
+    <div class="cookie-cat">
+      <div class="topo">
+        <h4>Cookies analíticos</h4>
+        <input type="checkbox" id="cookie-analiticos">
+      </div>
+      <p>Coletam dados agregados de navegação para medir o desempenho do site. Não são usados para anúncios nem para perfis comportamentais.</p>
+    </div>
+    <div class="cookie-cat">
+      <div class="topo">
+        <h4>Cookies de publicidade</h4>
+        <span class="sempre" style="color:#6B7280;">Não utilizados</span>
+      </div>
+      <p>Este site não utiliza cookies de publicidade.</p>
+    </div>
+    <p class="sub" style="margin-top:14px;">Você também pode bloquear cookies pelas configurações do seu navegador. Isso pode afetar o funcionamento do site.</p>
+    <div class="acoes">
+      <button class="btn btn-ghost-claro" id="cookie-modal-rejeitar">Rejeitar não necessários</button>
+      <button class="btn btn-ciano" id="cookie-modal-salvar">Salvar preferências</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  const io = new IntersectionObserver((entries)=>{
+  const io = new IntersectionObserver((entries)=> {
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
   },{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -780,6 +871,46 @@
       });
     });
   }
+
+  // --- Cookie banner (LGPD) ---
+  const COOKIE_KEY = 'atti_cookie_consent';
+  function cookieSalvar(prefs){
+    localStorage.setItem(COOKIE_KEY, JSON.stringify(prefs));
+    document.getElementById('cookie-banner').classList.remove('visible');
+    document.getElementById('cookie-modal').classList.remove('visible');
+  }
+  function cookieMostrarBanner(){
+    const salvo = localStorage.getItem(COOKIE_KEY);
+    if(!salvo){
+      setTimeout(()=>{ document.getElementById('cookie-banner').classList.add('visible'); }, 800);
+    }
+  }
+  document.addEventListener('DOMContentLoaded', cookieMostrarBanner);
+  document.getElementById('cookie-aceitar').addEventListener('click', ()=>{
+    cookieSalvar({necessarios:true, analiticos:true, publicidade:false});
+  });
+  document.getElementById('cookie-rejeitar').addEventListener('click', ()=>{
+    cookieSalvar({necessarios:true, analiticos:false, publicidade:false});
+  });
+  document.getElementById('cookie-configurar').addEventListener('click', ()=>{
+    document.getElementById('cookie-modal').classList.add('visible');
+  });
+  document.getElementById('cookie-modal-rejeitar').addEventListener('click', ()=>{
+    document.getElementById('cookie-analiticos').checked = false;
+    cookieSalvar({necessarios:true, analiticos:false, publicidade:false});
+  });
+  document.getElementById('cookie-modal-salvar').addEventListener('click', ()=>{
+    cookieSalvar({
+      necessarios:true,
+      analiticos:document.getElementById('cookie-analiticos').checked,
+      publicidade:false
+    });
+  });
+  document.getElementById('cookie-modal').addEventListener('click', (e)=>{
+    if(e.target === document.getElementById('cookie-modal')){
+      document.getElementById('cookie-modal').classList.remove('visible');
+    }
+  });
 </script>
 
 </body>
