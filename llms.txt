@@ -7,4 +7,4 @@ Leitura processual automatizada. O Atti lê processos judiciais e entrega um rel
 - Folha de origem apontada item a item no PDF
 - OCR em páginas digitalizadas
 
-Contato: falecom@atti.com.br
+Contato: falecom@atti.ia.br
