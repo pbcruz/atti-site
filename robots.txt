@@ -18,3 +18,5 @@ Allow: /
 
 User-agent: ClaudeBot
 Allow: /
+
+Sitemap: https://atti.ia.br/sitemap.xml
