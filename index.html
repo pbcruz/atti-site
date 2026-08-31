@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atti · Leitura processual automatizada</title>
+<meta name="description" content="O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item.">
+<link rel="canonical" href="https://atti.ia.br/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Atti">
+<meta property="og:title" content="Atti · Leitura processual automatizada">
+<meta property="og:description" content="O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item.">
+<meta property="og:url" content="https://atti.ia.br/">
+<meta property="og:image" content="https://atti.ia.br/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Atti · Leitura processual automatizada">
+<meta name="twitter:description" content="O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item.">
+<meta name="twitter:image" content="https://atti.ia.br/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://atti.ia.br/#org",
+      "name": "Atti",
+      "url": "https://atti.ia.br/",
+      "email": "falecom@atti.com.br",
+      "logo": "https://atti.ia.br/og-image.png",
+      "description": "Leitura inteligente de processos judiciais. O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item."
+    },
+    {
+      "@type": "Service",
+      "@id": "https://atti.ia.br/#service",
+      "name": "Leitura processual automatizada",
+      "provider": { "@id": "https://atti.ia.br/#org" },
+      "description": "O Atti lê milhares de páginas de processos judiciais, inclusive digitalizações, e entrega um relatório com a folha de origem apontada item a item.",
+      "areaServed": "BR",
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Escritórios de advocacia, fundos e gestoras"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://atti.ia.br/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Quanto tempo o Atti leva para ler um processo?",
+          "acceptedAnswer": { "@type": "Answer", "text": "O relatório fica pronto em minutos. Um processo de execução típico reúne de 800 a 3.000 páginas, e o Atti organiza o conteúdo com a folha de origem apontada item a item." }
+        },
+        {
+          "@type": "Question",
+          "name": "O Atti lê processos digitalizados?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Sim. O Atti roda OCR nas páginas escaneadas e valida o documento antes da leitura, digitalizado ou nativo." }
+        },
+        {
+          "@type": "Question",
+          "name": "Como o relatório é entregue?",
+          "acceptedAnswer": { "@type": "Answer", "text": "O relatório chega pronto por email, com linha do tempo ordenada, bens consolidados e folha de origem apontada item a item." }
+        },
+        {
+          "@type": "Question",
+          "name": "O que acontece com o PDF enviado?",
+          "acceptedAnswer": { "@type": "Answer", "text": "O PDF enviado é apagado do servidor após a leitura." }
+        },
+        {
+          "@type": "Question",
+          "name": "Quem usa o Atti?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Escritórios de advocacia, fundos e gestoras que decidem com o processo na mão. O advogado recebe a leitura completa para assinar o parecer; o comitê avalia o ativo com os bens consolidados." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grafite:#111827;
+    --grafite-fundo:#050A14;
+    --grafite-fundo-2:#0A1422;
+    --ciano:#0891B2;
+    --ciano-claro:#22B8CF;
+    --off:#F6F7F9;
+    --texto:#4B5563;
+    --texto-claro:#9CA3AF;
+    --borda:#E3E6EB;
+    --branco:#FFFFFF;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:var(--off);
+    color:var(--texto);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.logo-text,.btn,.stat,.step-num{
+    font-family:'Space Grotesk',sans-serif;
+    color:var(--grafite);
+  }
+  .container{width:100%;max-width:1160px;margin:0 auto;padding:0 24px;}
+  a{text-decoration:none;color:inherit;}
+  section{padding:104px 0;}
+  section[id]{scroll-margin-top:88px;}
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(5,10,20,.9);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(226,229,234,.08);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px;}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo svg{width:30px;height:30px;display:block;}
+  .logo-text{font-size:20px;font-weight:700;color:var(--branco);letter-spacing:.02em;}
+  .nav-links{display:flex;align-items:center;gap:32px;}
+  .nav-links a{font-size:14px;font-weight:500;color:#E5E7EB;transition:color .2s;position:relative;}
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;
+    background:var(--ciano);transition:width .25s cubic-bezier(.16,1,.3,1);
+  }
+  .nav-links a:hover{color:var(--branco);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{
+    display:none;flex-direction:column;gap:5px;
+    background:none;border:none;cursor:pointer;padding:10px 6px;
+    align-items:center;justify-content:center;
+  }
+  .nav-toggle span{width:22px;height:2px;background:var(--branco);transition:transform .25s cubic-bezier(.16,1,.3,1),opacity .2s;display:block;}
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open span:nth-child(2){opacity:0;}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-mobile{
+    display:none;flex-direction:column;gap:2px;
+    padding:10px 24px 22px;background:var(--grafite-fundo);
+    border-bottom:1px solid rgba(226,229,234,.08);
+  }
+  .nav-mobile.open{display:flex;}
+  .nav-mobile a{
+    font-size:15px;font-weight:500;color:#E5E7EB;
+    padding:12px 0;border-bottom:1px solid rgba(226,229,234,.06);
+  }
+  .nav-mobile a:hover{color:var(--branco);}
+  .nav-mobile a:last-of-type{border-bottom:none;}
+  .nav-mobile .btn{margin-top:14px;justify-content:center;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:13px 26px;border-radius:8px;font-size:15px;font-weight:600;
+    transition:background .2s,color .2s,border-color .2s,transform .15s;cursor:pointer;
+    border:1px solid transparent;font-family:'Inter',sans-serif;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn-sm{padding:9px 18px;font-size:14px;}
+  .btn-ciano{background:var(--ciano);color:var(--branco);}
+  .btn-ciano:hover{background:var(--ciano-claro);}
+  .btn-escuro{background:var(--grafite);color:var(--branco);}
+  .btn-escuro:hover{background:#1F2937;}
+  .btn-ghost{border-color:#374151;color:var(--branco);background:transparent;}
+  .btn-ghost:hover{border-color:#6B7280;background:rgba(255,255,255,.04);}
+  .btn-ghost-claro{border-color:var(--borda);color:var(--grafite);background:transparent;}
+  .btn-ghost-claro:hover{border-color:#C7CBD2;background:var(--branco);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:var(--grafite-fundo);
+    padding:184px 0 128px;
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 70% 60% at 70% 20%,black 10%,transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 70% 20%,black 10%,transparent 75%);
+    pointer-events:none;
+  }
+  .hero::after{
+    content:"";position:absolute;left:0;right:0;top:0;bottom:0;
+    background:
+      radial-gradient(700px 420px at 82% 28%,rgba(8,145,178,.16),transparent 62%),
+      radial-gradient(900px 500px at 12% 90%,rgba(8,145,178,.06),transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:72px;align-items:center;}
+  .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ciano-claro);
+    margin-bottom:26px;
+  }
+  .kicker::before{
+    content:"";width:28px;height:1px;background:var(--ciano);display:block;
+  }
+  .hero h1{
+    color:var(--branco);
+    font-size:clamp(36px,4.4vw,56px);
+    font-weight:700;line-height:1.1;letter-spacing:-.02em;
+    margin-bottom:26px;
+  }
+  .hero h1 em{font-style:normal;color:var(--ciano-claro);}
+  .hero p{
+    color:var(--texto-claro);font-size:17px;max-width:520px;margin-bottom:40px;
+  }
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;}
+  .hero-proof{
+    margin-top:56px;display:flex;align-items:center;gap:18px;
+    color:var(--texto-claro);font-size:13.5px;
+  }
+  .hero-proof .pip{display:flex;gap:6px;}
+  .hero-proof .pip span{
+    width:7px;height:7px;border-radius:50%;background:var(--ciano);
+    box-shadow:0 0 10px rgba(8,145,178,.8);
+  }
+
+  /* Mock do relatório */
+  .hero-mark{
+    display:flex;align-items:center;justify-content:center;
+    position:relative;z-index:2;
+  }
+  .hero-mark svg{
+    width:min(38vw,520px);height:min(38vw,520px);
+    filter:drop-shadow(0 20px 60px rgba(8,145,178,.22));
+    animation:attifl 7s ease-in-out infinite;
+  }
+  @keyframes attifl{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+  }
+
+  /* ---------- Section headers ---------- */
+  .sec-head{max-width:680px;margin-bottom:56px;}
+  .sec-head h2{font-size:clamp(28px,3vw,38px);font-weight:700;letter-spacing:-.015em;line-height:1.18;margin-bottom:18px;}
+  .sec-head p{font-size:17px;}
+  .sec-head.centro{margin-left:auto;margin-right:auto;text-align:center;}
+
+  /* ---------- Problema ---------- */
+  .problema{position:relative;}
+  .costs{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:860px;}
+  .cost{
+    background:var(--branco);border:1px solid var(--borda);border-radius:14px;
+    padding:44px 40px;position:relative;overflow:hidden;
+  }
+  .cost::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--ciano),transparent 70%);
+  }
+  .cost .stat-sufixo{
+    font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:600;color:var(--ciano);margin-left:6px;
+  }
+  .cost strong{
+    font-family:'Space Grotesk',sans-serif;color:var(--grafite);
+    font-size:58px;font-weight:700;line-height:1;display:block;margin-bottom:16px;letter-spacing:-.02em;
+  }
+  .cost h3{font-size:18px;font-weight:600;margin-bottom:10px;font-family:'Inter',sans-serif;}
+  .cost p{font-size:15px;}
+  .cost-nota{
+    margin-top:20px;padding-top:18px;border-top:1px dashed var(--borda);
+    font-size:13px;color:#6B7280;display:flex;gap:8px;align-items:flex-start;
+  }
+  .cost-nota svg{flex:none;margin-top:2px;}
+
+  /* ---------- Como funciona (banda escura) ---------- */
+  .como-funciona{
+    background:var(--grafite-fundo);
+    position:relative;overflow:hidden;
+  }
+  .como-funciona::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(800px 480px at 15% 10%,rgba(8,145,178,.10),transparent 60%);
+    pointer-events:none;
+  }
+  .como-funciona .sec-head h2{color:var(--branco);}
+  .como-funciona .sec-head p{color:var(--texto-claro);}
+  .steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .steps::before{
+    content:"";position:absolute;top:34px;left:12%;right:12%;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(34,184,207,.4),transparent);
+  }
+  .step{
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:14px;
+    padding:36px 30px 32px;position:relative;
+  }
+  .step-num{
+    font-size:15px;font-weight:700;color:var(--ciano-claro);letter-spacing:.04em;
+    display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;
+  }
+  .step-num::after{content:"";width:34px;height:1px;background:rgba(34,184,207,.5);}
+  .step h3{font-size:18px;font-weight:600;color:var(--branco);margin-bottom:10px;font-family:'Inter',sans-serif;}
+  .step p{font-size:14.5px;color:var(--texto-claro);}
+
+  /* ---------- Relatório ---------- */
+  .relatorio{background:var(--branco);border-top:1px solid var(--borda);}
+  .relatorio-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--borda);border-radius:14px;overflow:hidden;}
+  .relatorio-item{
+    padding:30px 26px;border-right:1px solid var(--borda);border-bottom:1px solid var(--borda);
+    position:relative;transition:background .25s;
+  }
+  .relatorio-item:hover{background:#F8FAFB;}
+  .relatorio-item:nth-child(4n){border-right:none;}
+  .relatorio-item:nth-child(n+5){border-bottom:none;}
+  .relatorio-item .ico{
+    width:34px;height:34px;border-radius:8px;
+    background:rgba(8,145,178,.09);color:var(--ciano);
+    display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+  }
+  .relatorio-item .ico svg{width:18px;height:18px;}
+  .relatorio-item h3{font-size:15px;font-weight:600;color:var(--grafite);margin-bottom:7px;font-family:'Inter',sans-serif;}
+  .relatorio-item p{font-size:13px;color:var(--texto);}
+
+  /* ---------- Segurança ---------- */
+  .seguranca{
+    position:relative;overflow:hidden;
+    background:var(--grafite-fundo);
+  }
+  .seguranca::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(700px 420px at 85% 12%,rgba(8,145,178,.10),transparent 60%);
+    pointer-events:none;
+  }
+  .seguranca .container{position:relative;z-index:1;}
+  .seguranca .sec-head h2{color:var(--branco);}
+  .seguranca .sec-head p{color:var(--texto-claro);}
+  .trust-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .trust{
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:14px;
+    padding:34px 30px;
+    transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .3s,background .25s,box-shadow .35s;
+  }
+  .trust:hover{
+    transform:translateY(-4px);
+    border-color:rgba(34,184,207,.45);
+    background:rgba(255,255,255,.05);
+    box-shadow:0 18px 44px rgba(0,0,0,.35);
+  }
+  .trust .ico{
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid rgba(34,184,207,.45);color:var(--ciano-claro);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  }
+  .trust .ico svg{width:18px;height:18px;}
+  .trust h3{font-size:16px;font-weight:600;margin-bottom:8px;font-family:'Inter',sans-serif;color:var(--branco);}
+  .trust p{font-size:14px;color:var(--texto-claro);}
+
+  /* ---------- Público ---------- */
+  .publico{background:var(--branco);border-top:1px solid var(--borda);}
+  .publico-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;}
+  .pub{
+    border:1px solid var(--borda);border-radius:14px;padding:40px 36px;background:var(--off);
+    display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;
+    transition:border-color .25s,transform .3s cubic-bezier(.16,1,.3,1);
+  }
+  .pub:hover{border-color:rgba(8,145,178,.5);transform:translateY(-3px);}
+  .pub .tag{
+    font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ciano);margin-bottom:4px;
+  }
+  .pub h3{font-size:20px;font-weight:600;margin-bottom:4px;}
+  .pub p{font-size:15px;}
+
+  /* ---------- CTA ---------- */
+  .cta{background:var(--grafite-fundo);padding:120px 0;text-align:center;position:relative;overflow:hidden;}
+  .cta::before{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:820px;height:420px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(8,145,178,.16),transparent);
+    pointer-events:none;
+  }
+  .cta .container{position:relative;z-index:2;}
+  .cta h2{
+    color:var(--branco);font-size:clamp(30px,3.6vw,46px);font-weight:700;
+    letter-spacing:-.02em;line-height:1.14;max-width:760px;margin:0 auto 22px;
+  }
+  .cta h2 em{font-style:normal;color:var(--ciano-claro);}
+  .cta p{color:var(--texto-claro);font-size:17px;max-width:540px;margin:0 auto 40px;}
+  .cta .btn{min-width:220px;}
+
+  /* ---------- FAQ ---------- */
+  .faq{background:var(--branco);border-top:1px solid var(--borda);}
+  .faq-grid{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:0;border:1px solid var(--borda);border-radius:14px;overflow:hidden;}
+  .faq-item{border-bottom:1px solid var(--borda);background:var(--branco);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-item summary{
+    list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:22px 26px;font-family:'Inter',sans-serif;font-size:16px;font-weight:600;color:var(--grafite);
+    transition:background .2s;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary:hover{background:#F8FAFB;}
+  .faq-item summary::after{
+    content:"+";flex:none;font-size:20px;font-weight:500;color:var(--ciano);font-family:'Space Grotesk',sans-serif;
+    transition:transform .25s cubic-bezier(.16,1,.3,1);
+  }
+  .faq-item details[open] summary::after{transform:rotate(45deg);}
+  .faq-item .faq-a{padding:0 26px 22px;font-size:15px;color:var(--texto);max-width:640px;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--grafite-fundo);border-top:1px solid rgba(226,229,234,.08);padding:68px 0 40px;}
+  .footer-top{display:flex;justify-content:space-between;gap:48px;flex-wrap:wrap;margin-bottom:48px;}
+  .footer-brand svg{width:34px;height:34px;display:block;margin-bottom:16px;}
+  .footer-brand p{color:var(--texto-claro);font-size:14px;max-width:280px;}
+  .footer-col h3.footer-col-title{
+    font-family:'Space Grotesk',sans-serif;color:var(--branco);
+    font-size:14px;font-weight:600;margin-bottom:16px;
+  }
+  .footer-col a{display:block;color:var(--texto-claro);font-size:14px;margin-bottom:10px;transition:color .2s;}
+  .footer-col a:hover{color:var(--branco);}
+  .footer-bottom{
+    border-top:1px solid rgba(226,229,234,.08);padding-top:28px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    color:var(--texto-claro);font-size:13px;
+  }
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width:960px){
+    .hero-grid{grid-template-columns:1fr;gap:60px;}
+    .costs{grid-template-columns:1fr;max-width:560px;}
+    .steps{grid-template-columns:1fr;}
+    .steps::before{display:none;}
+    .trust-grid{grid-template-columns:1fr 1fr;}
+    .publico-grid{grid-template-columns:1fr;max-width:560px;}
+    .relatorio-grid{grid-template-columns:repeat(2,1fr);}
+    .relatorio-item:nth-child(4n){border-right:1px solid var(--borda);}
+    .relatorio-item:nth-child(2n){border-right:none;}
+    .relatorio-item:nth-child(n+5){border-bottom:1px solid var(--borda);}
+    .relatorio-item:nth-child(n+7){border-bottom:none;}
+  }
+  @media (max-width:640px){
+    section{padding:80px 0;}
+    .hero{padding:148px 0 96px;}
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+    .trust-grid{grid-template-columns:1fr;}
+    .relatorio-grid{grid-template-columns:1fr;}
+    .relatorio-item{border-right:none !important;border-bottom:1px solid var(--borda) !important;}
+    .relatorio-item:last-child{border-bottom:none !important;}
+    .cost strong{font-size:48px;}
+    .mock{padding:20px 18px;}
+  }
+
+  /* ---------- Motion ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+
+  .step,.relatorio-item,.pub,.cost,.mock{
+    transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s,border-color .35s,background .25s;
+  }
+  .step:hover,.relatorio-item:hover,.pub:hover,.cost:hover{
+    transform:translateY(-4px);
+    border-color:rgba(8,145,178,.45);
+    box-shadow:0 18px 44px rgba(17,24,39,.10);
+  }
+  .step:hover{
+    border-color:rgba(34,184,207,.4);
+    box-shadow:0 18px 44px rgba(0,0,0,.35);
+  }
+
+  :focus-visible{outline:2px solid var(--ciano);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="container nav">
+    <a href="#" class="logo" aria-label="Atti, página inicial">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="#F9FAFB"><path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/><path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/><path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/><path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/><path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/></g></svg>
+      <span class="logo-text">Atti</span>
+    </a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#relatorio">O relatório</a>
+      <a href="#seguranca">Segurança</a>
+      <a href="login.html">Entrar</a>
+      <a href="#cta" class="btn btn-ciano btn-sm">Solicitar acesso</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-mobile">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<nav class="nav-mobile" id="nav-mobile" aria-label="Navegação móvel">
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#relatorio">O relatório</a>
+      <a href="#seguranca">Segurança</a>
+      <a href="login.html">Entrar</a>
+      <a href="#cta" class="btn btn-ciano">Solicitar acesso</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="kicker reveal">Leitura processual automatizada</span>
+      <h1 class="reveal">O Atti transforma o processo em um <em>relatório pronto em minutos</em></h1>
+      <p class="reveal">Petições, decisões, laudos e anexos: o Atti lê milhares de páginas, inclusive digitalizações, e organiza o conteúdo em um relatório com a folha de origem apontada item a item.</p>
+      <div class="hero-actions reveal">
+        <a href="#cta" class="btn btn-ciano">Solicitar acesso</a>
+        <a href="#como-funciona" class="btn btn-ghost">Ver como funciona</a>
+      </div>
+      <div class="hero-proof reveal">
+        <span class="pip" aria-hidden="true"><span></span><span></span><span></span></span>
+        Leitura de processo real verificável folha a folha
+      </div>
+    </div>
+
+    <div class="hero-mark reveal" aria-hidden="true">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#F9FAFB">
+          <path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/>
+          <path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/>
+          <path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/>
+          <path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/>
+          <path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEMA ============ -->
+<section id="problema" class="problema">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>Ler um processo custa dias e dinheiro</h2>
+      <p>Comprar um ativo, executar uma garantia ou responder a uma ação: nesses caminhos, alguém precisa ler o processo antes de decidir. E a leitura, feita página por página, custa caro.</p>
+    </div>
+    <div class="costs">
+      <div class="cost reveal">
+        <strong>4 horas</strong>
+        <h3>É o que um advogado júnior leva para ler 500 páginas</h3>
+        <p>Um processo típico de execução reúne de 800 a 3.000 páginas, e a leitura manual adia a decisão em dias.</p>
+      </div>
+      <div class="cost reveal">
+        <strong>R$ 4.000<span class="stat-sufixo">+</span></strong>
+        <h3>O valor de um parecer sênior sobre o mesmo volume</h3>
+        <p>É a hora técnica aplicada página a página, pela tabela de honorários da OAB.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ COMO FUNCIONA ============ -->
+<section id="como-funciona" class="como-funciona">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>Do upload ao relatório em três passos</h2>
+      <p>O processo entra como está e sai organizado, em três movimentos.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step-num">01</span>
+        <h3>O advogado envia o PDF</h3>
+        <p>Digitalizado ou nativo, o arquivo entra como está. O Atti roda OCR nas páginas escaneadas e valida o documento antes da leitura.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">02</span>
+        <h3>A leitura acontece bloco por bloco</h3>
+        <p>Duas camadas de IA leem o processo em blocos de 150 páginas e consolidam o conteúdo em um relatório único.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">03</span>
+        <h3>O relatório chega pronto por email</h3>
+        <p>Linha do tempo ordenada, bens consolidados, folha de origem apontada: o relatório segue direto para a pasta do processo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RELATÓRIO ============ -->
+<section id="relatorio" class="relatorio">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>O que vem no relatório</h2>
+      <p>A leitura organizada chega com a folha de origem apontada item a item no PDF.</p>
+    </div>
+    <div class="relatorio-grid">
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        <h3>Dados do processo</h3><p>Número, vara e natureza da ação, logo na abertura.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3>Partes e advogados</h3><p>Partes com CPF e CNPJ, advogados com OAB.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+        <h3>Linha do tempo</h3><p>Do primeiro despacho à última movimentação, em ordem cronológica.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg></span>
+        <h3>Bens penhorados</h3><p>Imóveis com matrícula e cartório de origem.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+        <h3>Pesquisas patrimoniais</h3><p>SISBAJUD, RENAJUD, INFOJUD e demais consultas registradas nos autos, reunidas.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+        <h3>Recursos e resultados</h3><p>Recurso interposto e resultado, um a um.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span>
+        <h3>Mapa de folhas</h3><p>A folha de origem acompanha item a item.</p>
+      </div>
+      <div class="relatorio-item reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span>
+        <h3>Movimentações processuais</h3><p>Toda movimentação registrada, na ordem dos autos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEGURANÇA ============ -->
+<section id="seguranca" class="seguranca">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>Verificável folha a folha</h2>
+      <p>O que está no relatório saiu do processo enviado. Ponto.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <h3>Folha de origem item a item</h3><p>A afirmação do relatório remete à folha exata do PDF.</p>
+      </div>
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+        <h3>Datas validadas</h3><p>Data fora do calendário é filtrada antes da entrega.</p>
+      </div>
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <h3>Dados protegidos (LGPD)</h3><p>O PDF enviado é apagado do servidor após a leitura.</p>
+      </div>
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <h3>Leitura fiel do PDF</h3><p>O relatório reflete o documento enviado, e o documento enviado reflete o processo.</p>
+      </div>
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+        <h3>Uso do contratante</h3><p>Quem envia o processo recebe o relatório.</p>
+      </div>
+      <div class="trust reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <h3>Acesso restrito</h3><p>Advogados e equipes autorizadas entram; o resto, o sistema barra.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÚBLICO ============ -->
+<section id="publico" class="publico">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>Quem decide com o processo na mão usa o Atti</h2>
+      <p>A leitura chega pronta para quem assina o parecer e para quem avalia o ativo.</p>
+    </div>
+    <div class="publico-grid">
+      <div class="pub reveal">
+        <span class="tag">Advocacia</span>
+        <h3>Escritórios de advocacia</h3>
+        <p>O advogado recebe a leitura completa e assina o parecer com a folha de origem em mãos.</p>
+      </div>
+      <div class="pub reveal">
+        <span class="tag">Investimento</span>
+        <h3>Fundos e gestoras</h3>
+        <p>O comitê avalia o ativo com os bens consolidados e a linha do tempo na mesa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta reveal" id="cta">
+  <div class="container">
+    <h2>O relatório fica pronto <em>antes de a reunião começar</em></h2>
+    <p>Envie um processo real e veja a leitura organizada chegar, folha por folha, antes da próxima reunião.</p>
+    <a class="btn btn-ciano" href="mailto:falecom@atti.com.br">Solicitar acesso</a>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="faq">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>Perguntas frequentes</h2>
+      <p>O que você quer saber antes de enviar o primeiro processo.</p>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item reveal">
+        <details>
+          <summary>Quanto tempo o Atti leva para ler um processo?</summary>
+          <div class="faq-a">O relatório fica pronto em minutos. Um processo de execução típico reúne de 800 a 3.000 páginas, e o Atti organiza o conteúdo com a folha de origem apontada item a item.</div>
+        </details>
+      </div>
+      <div class="faq-item reveal">
+        <details>
+          <summary>O Atti lê processos digitalizados?</summary>
+          <div class="faq-a">Sim. O Atti roda OCR nas páginas escaneadas e valida o documento antes da leitura, digitalizado ou nativo.</div>
+        </details>
+      </div>
+      <div class="faq-item reveal">
+        <details>
+          <summary>Como o relatório é entregue?</summary>
+          <div class="faq-a">O relatório chega pronto por email, com linha do tempo ordenada, bens consolidados e folha de origem apontada item a item.</div>
+        </details>
+      </div>
+      <div class="faq-item reveal">
+        <details>
+          <summary>O que acontece com o PDF enviado?</summary>
+          <div class="faq-a">O PDF enviado é apagado do servidor após a leitura.</div>
+        </details>
+      </div>
+      <div class="faq-item reveal">
+        <details>
+          <summary>Quem usa o Atti?</summary>
+          <div class="faq-a">Escritórios de advocacia, fundos e gestoras que decidem com o processo na mão. O advogado recebe a leitura completa para assinar o parecer; o comitê avalia o ativo com os bens consolidados.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <svg width="28" height="28" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="#F9FAFB"><path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/><path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/><path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/><path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/><path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/></g></svg>
+        <p>Leitura inteligente de processos judiciais</p>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-col-title">Produto</h3>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#relatorio">O relatório</a>
+        <a href="#seguranca">Segurança</a>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-col-title">Contato</h3>
+        <a href="mailto:falecom@atti.com.br">falecom@atti.com.br</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Atti · Leitura inteligente de processos judiciais</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  const toggle = document.querySelector('.nav-toggle');
+  const navMobile = document.querySelector('.nav-mobile');
+  if(toggle && navMobile){
+    toggle.addEventListener('click', ()=>{
+      const open = toggle.classList.toggle('open');
+      navMobile.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navMobile.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', ()=>{
+        toggle.classList.remove('open');
+        navMobile.classList.remove('open');
+        toggle.setAttribute('aria-expanded','false');
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Atti
+
+Leitura processual automatizada. O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item.
+
+- Due diligence processual: leitura de processos de execução do início ao fim
+- Relatório estruturado: partes, linha do tempo, bens penhorados, alertas estratégicos
+- Folha de origem apontada item a item no PDF
+- OCR em páginas digitalizadas
+
+Contato: falecom@atti.com.br

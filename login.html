@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar · Atti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grafite:#111827;
+    --grafite-fundo:#050A14;
+    --ciano:#0891B2;
+    --ciano-claro:#22B8CF;
+    --off:#F6F7F9;
+    --texto:#4B5563;
+    --borda:#E3E6EB;
+    --branco:#FFFFFF;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--texto);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,.logo-text,.btn{font-family:'Space Grotesk',sans-serif;color:var(--grafite);}
+  a{text-decoration:none;color:inherit;}
+  .login-wrapper{display:flex;min-height:100vh;}
+
+  /* Painel visual escuro */
+  .login-visual{
+    flex:1;
+    background:var(--grafite-fundo);
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:60px;
+  }
+  .login-visual::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(148,163,184,.055) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(148,163,184,.055) 1px,transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 70% 60% at 30% 30%,black 10%,transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 30% 30%,black 10%,transparent 75%);
+    pointer-events:none;
+  }
+  .login-visual::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(700px 420px at 15% 25%,rgba(8,145,178,.16),transparent 62%);
+    pointer-events:none;
+  }
+  .login-visual .simbolo{
+    position:absolute;right:-60px;bottom:-60px;width:340px;opacity:.12;
+    pointer-events:none;
+  }
+  .login-visual .conteudo{position:relative;z-index:2;max-width:520px;}
+  .login-visual .barra-ciano{
+    width:56px;height:6px;background:var(--ciano);border-radius:99px;margin-bottom:28px;
+  }
+  .login-visual h1{
+    color:var(--branco);font-size:clamp(34px,3.6vw,48px);font-weight:700;
+    line-height:1.12;letter-spacing:-.02em;margin-bottom:20px;max-width:480px;
+  }
+  .login-visual h1 em{font-style:normal;color:var(--ciano-claro);}
+  .login-visual p{
+    font-size:1.02rem;color:rgba(249,250,251,.72);max-width:450px;
+  }
+
+  /* Painel claro de login */
+  .login-panel{
+    width:520px;background:var(--branco);
+    display:flex;flex-direction:column;justify-content:center;
+    padding:60px;position:relative;
+  }
+  .login-panel .logo{
+    display:flex;align-items:center;gap:10px;margin-bottom:44px;
+  }
+  .login-panel .logo svg{width:28px;height:28px;display:block;}
+  .login-panel .logo-text{font-size:20px;font-weight:700;letter-spacing:.02em;}
+  .login-panel h2{font-size:2rem;margin-bottom:8px;letter-spacing:-.015em;}
+  .login-panel .subtitle{
+    font-size:.78rem;color:var(--texto);margin-bottom:40px;
+    text-transform:uppercase;letter-spacing:.12em;
+  }
+  .form-field{margin-bottom:24px;}
+  .form-field label{
+    display:block;font-size:.72rem;text-transform:uppercase;
+    color:var(--grafite);margin-bottom:10px;font-weight:600;letter-spacing:.08em;
+  }
+  .form-field input{
+    width:100%;padding:15px 16px;border:1px solid var(--borda);
+    background:#FCFDFE;font-family:inherit;font-size:1rem;color:var(--grafite);
+    outline:none;border-radius:0;transition:border-color .25s,box-shadow .25s;
+  }
+  .form-field input:focus{
+    border-color:var(--ciano);
+    box-shadow:0 0 0 3px rgba(8,145,178,.15);
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:100%;padding:15px 24px;border:none;cursor:pointer;
+    background:var(--ciano);color:var(--branco);
+    font-size:15px;font-weight:600;border-radius:8px;
+    transition:background .2s,transform .15s;
+  }
+  .btn:hover{background:var(--ciano-claro);}
+  .btn:active{transform:scale(.99);}
+  .btn:disabled{opacity:.65;cursor:not-allowed;}
+  .login-error{
+    margin-top:14px;font-size:13.5px;color:#B91C1C;min-height:20px;
+  }
+  .voltar{
+    display:inline-flex;align-items:center;gap:8px;
+    margin-top:28px;font-size:14px;color:var(--texto);
+    transition:color .2s;
+  }
+  .voltar:hover{color:var(--grafite);}
+  .voltar svg{width:15px;height:15px;}
+
+  /* Pós-login (área restrita placeholder) */
+  .app-panel{
+    width:520px;background:var(--branco);
+    display:flex;flex-direction:column;justify-content:center;
+    padding:60px;
+  }
+  .app-panel h2{font-size:1.7rem;margin-bottom:8px;}
+  .app-panel .bemvindo{
+    font-size:.78rem;color:var(--texto);margin-bottom:32px;
+    text-transform:uppercase;letter-spacing:.12em;
+  }
+  .app-alert{
+    background:#F0FAFC;border:1px solid rgba(8,145,178,.28);border-left:3px solid var(--ciano);
+    border-radius:8px;padding:14px 16px;font-size:14px;color:#155E75;margin-bottom:28px;
+  }
+  .app-acoes{display:flex;gap:12px;flex-wrap:wrap;}
+  .app-acoes .btn{width:auto;min-width:160px;}
+  .app{display:none;}
+  .app.active{display:flex;}
+  .btn-ghost{
+    background:transparent;border:1px solid var(--borda);color:var(--grafite);
+  }
+  .btn-ghost:hover{background:var(--off);}
+
+  @media (max-width:960px){
+    .login-visual{display:none;}
+    .login-panel{width:100%;padding:48px 28px;}
+  }
+  :focus-visible{outline:2px solid var(--ciano);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="login-wrapper">
+
+  <!-- Painel visual -->
+  <div class="login-visual">
+    <svg class="simbolo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="#fff"><path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/><path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/><path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/><path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/><path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/></g></svg>
+    <div class="conteudo">
+      <div class="barra-ciano"></div>
+      <h1>O relatório fica pronto <em>antes de a reunião começar</em></h1>
+      <p>O Atti lê processos de execução do início ao fim e devolve um dossiê estruturado: partes, linha do tempo, bens penhorados e alertas estratégicos.</p>
+    </div>
+  </div>
+
+  <!-- Tela de login -->
+  <div class="login-panel" id="login-screen">
+    <div class="logo">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g fill="#111827"><path transform="translate(5,0)" d="M52 10 H68 L71.5 28 L48.5 28 Z"/><path transform="translate(-4,0)" d="M49.7 31 L70.3 31 L79.1 49 L40.9 49 Z"/><path fill="#0891B2" transform="translate(6,0)" d="M39.4 52 L80.6 52 L89.4 70 L67.4 70 L60 55 L52.6 70 L30.6 70 Z"/><path transform="translate(-5,0)" d="M29.1 73 L90.9 73 L99.7 91 L77.6 91 L75.2 86 L44.8 86 L42.4 91 L20.3 91 Z"/><path transform="translate(4,0)" d="M18.8 94 L40.9 94 L32.1 112 L10 112 Z M79.1 94 L101.2 94 L110 112 L87.9 112 Z"/></g></svg>
+      <span class="logo-text">Atti</span>
+    </div>
+    <h2>Bem-vindo de volta</h2>
+    <p class="subtitle">Acesso restrito</p>
+    <form id="login-form" novalidate>
+      <div class="form-field">
+        <label for="login-user">Usuário</label>
+        <input type="text" id="login-user" placeholder="Digite seu usuário" autocomplete="username" required>
+      </div>
+      <div class="form-field">
+        <label for="login-pass">Senha</label>
+        <input type="password" id="login-pass" placeholder="Digite sua senha" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn" id="login-btn">Entrar no Sistema</button>
+      <div class="login-error" id="login-error" role="alert"></div>
+    </form>
+    <a class="voltar" href="kimi-site.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      Voltar para o site principal
+    </a>
+  </div>
+
+  <!-- Pós-login -->
+  <div class="app-panel app" id="app">
+    <h2>Área restrita</h2>
+    <p class="bemvindo">Sessão iniciada como <span id="user-name"></span></p>
+    <div class="app-alert">Acesso validado. O painel de envio de processos será integrado aqui.</div>
+    <div class="app-acoes">
+      <button class="btn" id="btn-dossie" type="button" onclick="window.location.href='kimi-site.html'">Voltar ao site</button>
+      <button class="btn btn-ghost" id="btn-sair" type="button">Sair</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const API_BASE = window.location.origin || "http://localhost:8000";
+  let authToken = sessionStorage.getItem("audit_token") || "";
+  let currentUser = sessionStorage.getItem("audit_user") || "";
+
+  if (authToken) {
+    showApp();
+  }
+
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("login-btn");
+    const errEl = document.getElementById("login-error");
+    btn.disabled = true;
+    btn.textContent = "Autenticando...";
+    errEl.textContent = "";
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: document.getElementById("login-user").value,
+          password: document.getElementById("login-pass").value,
+        }),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.detail || "Credenciais inválidas");
+      }
+      const data = await res.json();
+      authToken = data.token;
+      currentUser = data.username;
+      sessionStorage.setItem("audit_token", authToken);
+      sessionStorage.setItem("audit_user", currentUser);
+      showApp();
+    } catch (err) {
+      errEl.textContent = err.message;
+    }
+    btn.disabled = false;
+    btn.textContent = "Entrar no Sistema";
+  });
+
+  function showApp() {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("app").classList.add("active");
+    document.getElementById("user-name").textContent = currentUser;
+  }
+
+  document.getElementById("btn-sair").addEventListener("click", () => {
+    authToken = "";
+    currentUser = "";
+    sessionStorage.removeItem("audit_token");
+    sessionStorage.removeItem("audit_user");
+    document.getElementById("app").classList.remove("active");
+    document.getElementById("login-screen").style.display = "flex";
+  });
+</script>
+
+</body>
+</html>
