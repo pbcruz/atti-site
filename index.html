@@ -28,7 +28,7 @@
       "@id": "https://atti.ia.br/#org",
       "name": "Atti",
       "url": "https://atti.ia.br/",
-      "email": "falecom@atti.ia.br",
+      "email": "falecom@atti.com.br",
       "logo": "https://atti.ia.br/og-image.png",
       "description": "Leitura inteligente de processos judiciais. O Atti lê processos judiciais e entrega um relatório organizado, com a folha de origem apontada item a item."
     },
@@ -390,30 +390,6 @@
   .cta p{color:var(--texto-claro);font-size:17px;max-width:540px;margin:0 auto 40px;}
   .cta .btn{min-width:220px;}
 
-  /* ---------- Formulário CTA ---------- */
-  .cta-form{max-width:560px;margin:0 auto;text-align:left;}
-  .campos{display:flex;flex-direction:column;gap:18px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:28px;}
-  .campo{display:flex;flex-direction:column;gap:8px;}
-  .campo label{font-size:13px;font-weight:600;color:#E5E7EB;}
-  .campo .opcional{color:#9CA3AF;font-weight:500;}
-  .campo input,
-  .campo textarea{
-    width:100%;padding:13px 15px;font-size:15px;color:var(--grafite);
-    background:var(--branco);border:1px solid rgba(255,255,255,.15);border-radius:8px;
-    font-family:inherit;outline:none;transition:border-color .25s,box-shadow .25s;
-  }
-  .campo input::placeholder,
-  .campo textarea::placeholder{color:#9CA3AF;}
-  .campo input:focus,
-  .campo textarea:focus{border-color:var(--ciano);box-shadow:0 0 0 3px rgba(8,145,178,.25);}
-  .campo textarea{resize:vertical;min-height:96px;line-height:1.5;}
-  .cta-form .btn{width:100%;margin-top:6px;}
-  .alternativa{margin-top:20px;font-size:14px;color:var(--texto-claro);}
-  .alternativa a{color:var(--ciano-claro);text-decoration:underline;}
-  @media (max-width:480px){
-    .campos{padding:22px 18px;}
-  }
-
   /* ---------- FAQ ---------- */
   .faq{background:var(--branco);border-top:1px solid var(--borda);}
   .faq-grid{max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:0;border:1px solid var(--borda);border-radius:14px;overflow:hidden;}
@@ -587,7 +563,7 @@
       </div>
       <div class="hero-proof reveal">
         <span class="pip" aria-hidden="true"><span></span><span></span><span></span></span>
-        Leitura de processo real verificável folha a folha
+        Verificável folha a folha
       </div>
     </div>
 
@@ -778,12 +754,13 @@
           <input type="text" id="cta-empresa" name="empresa" placeholder="Escritório ou fundo" autocomplete="organization">
         </div>
         <div class="campo">
-          <label for="cta-mensagem">Mensagem <span class="opcional">(opcional)</span></label>
+          <label for="cta-mensagem">Mensagem <span style="text-transform:none;letter-spacing:0;color:#9CA3AF;">(opcional)</span></label>
           <textarea id="cta-mensagem" name="mensagem" rows="3" placeholder="Conte sobre o processo que quer analisar"></textarea>
         </div>
         <button type="submit" class="btn btn-ciano">Solicitar acesso</button>
-        <p class="alternativa">Prefere contato direto? <a href="mailto:falecom@atti.ia.br?subject=Solicita%C3%A7%C3%A3o%20de%20acesso%20-%20Atti">falecom@atti.ia.br</a></p>
+        <p class="alternativa">Prefere contato direto? <a href="mailto:falecom@atti.com.br?subject=Solicita%C3%A7%C3%A3o%20de%20acesso%20-%20Atti">falecom@atti.com.br</a></p>
       </div>
+      <div class="sucesso" id="cta-sucesso">Recebemos sua solicitação. Vamos responder em até 1 dia útil.</div>
     </form>
   </div>
 </section>
@@ -845,7 +822,7 @@
       </div>
       <div class="footer-col">
         <h3 class="footer-col-title">Contato</h3>
-        <a href="mailto:falecom@atti.ia.br">falecom@atti.ia.br</a>
+        <a href="mailto:falecom@atti.com.br">falecom@atti.com.br</a>
       </div>
     </div>
     <div class="footer-bottom">© 2026 Atti · Leitura inteligente de processos judiciais · <a href="/privacidade.html">Política de Privacidade</a></div>
